@@ -7,14 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84471C281A65824A00592B40 /* DeviceListItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84471C271A65824A00592B40 /* DeviceListItemTableViewCell.m */; };
+		84471C2D1A65867900592B40 /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C291A65867900592B40 /* lock.png */; };
+		84471C2E1A65867900592B40 /* sel_battery.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C2A1A65867900592B40 /* sel_battery.png */; };
+		84471C2F1A65867900592B40 /* unlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C2B1A65867900592B40 /* unlock.png */; };
+		84471C301A65867900592B40 /* unsel_battery.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C2C1A65867900592B40 /* unsel_battery.png */; };
+		84471C341A658D3900592B40 /* verbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C331A658D3900592B40 /* verbar.png */; };
+		84471C3F1A65900600592B40 /* detail.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C381A65900600592B40 /* detail.png */; };
+		84471C481A65908900592B40 /* DeviceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84471C471A65908900592B40 /* DeviceDetailViewController.m */; };
+		84471C4E1A65994F00592B40 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84471C4B1A65994F00592B40 /* SVProgressHUD.bundle */; };
+		84471C4F1A65994F00592B40 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 84471C4D1A65994F00592B40 /* SVProgressHUD.m */; };
 		84A1EC721A63F41E00789AF8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A1EC711A63F41E00789AF8 /* Crashlytics.framework */; };
 		84AF3C4E1A63F02A00A8DC5F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C4D1A63F02A00A8DC5F /* main.m */; };
 		84AF3C511A63F02A00A8DC5F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C501A63F02A00A8DC5F /* AppDelegate.m */; };
-		84AF3C541A63F02A00A8DC5F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C531A63F02A00A8DC5F /* ViewController.m */; };
+		84AF3C541A63F02A00A8DC5F /* DeviceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C531A63F02A00A8DC5F /* DeviceListViewController.m */; };
 		84AF3C571A63F02A00A8DC5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84AF3C551A63F02A00A8DC5F /* Main.storyboard */; };
 		84AF3C591A63F02A00A8DC5F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84AF3C581A63F02A00A8DC5F /* Images.xcassets */; };
 		84AF3C5C1A63F02A00A8DC5F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84AF3C5A1A63F02A00A8DC5F /* LaunchScreen.xib */; };
 		84AF3C681A63F02A00A8DC5F /* ProximityBLETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C671A63F02A00A8DC5F /* ProximityBLETests.m */; };
+		84E418921A67F6920083A2BD /* ChangeDeviceNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E418911A67F6920083A2BD /* ChangeDeviceNameViewController.m */; };
+		84E418961A6839FA0083A2BD /* companylogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E418941A6839FA0083A2BD /* companylogo.png */; };
+		84E418981A683B980083A2BD /* applogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E418971A683B980083A2BD /* applogo.png */; };
+		84E4189A1A683D780083A2BD /* buttonback.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E418991A683D780083A2BD /* buttonback.png */; };
+		84E4915C1A644A54001B1214 /* BLElib.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E4915B1A644A54001B1214 /* BLElib.m */; };
+		84E491611A6459F0001B1214 /* rightarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E491601A6459F0001B1214 /* rightarrow.png */; };
+		84FD228F1A669311009A3A4C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84FD228D1A669311009A3A4C /* Model.xcdatamodeld */; };
+		84FD22921A669A08009A3A4C /* Equipment.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD22911A669A08009A3A4C /* Equipment.m */; };
+		84FD22991A66A8F9009A3A4C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FD22981A66A8F9009A3A4C /* Foundation.framework */; };
+		84FD229B1A66A908009A3A4C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FD229A1A66A908009A3A4C /* CoreData.framework */; };
+		84FD229D1A66A919009A3A4C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FD229C1A66A919009A3A4C /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,20 +49,49 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		84471C261A65824A00592B40 /* DeviceListItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceListItemTableViewCell.h; sourceTree = "<group>"; };
+		84471C271A65824A00592B40 /* DeviceListItemTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceListItemTableViewCell.m; sourceTree = "<group>"; };
+		84471C291A65867900592B40 /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
+		84471C2A1A65867900592B40 /* sel_battery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sel_battery.png; sourceTree = "<group>"; };
+		84471C2B1A65867900592B40 /* unlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlock.png; sourceTree = "<group>"; };
+		84471C2C1A65867900592B40 /* unsel_battery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unsel_battery.png; sourceTree = "<group>"; };
+		84471C331A658D3900592B40 /* verbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = verbar.png; sourceTree = "<group>"; };
+		84471C381A65900600592B40 /* detail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = detail.png; sourceTree = "<group>"; };
+		84471C461A65908900592B40 /* DeviceDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceDetailViewController.h; sourceTree = "<group>"; };
+		84471C471A65908900592B40 /* DeviceDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceDetailViewController.m; sourceTree = "<group>"; };
+		84471C4A1A65994F00592B40 /* SVProgressHUD+utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD+utils.h"; sourceTree = "<group>"; };
+		84471C4B1A65994F00592B40 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		84471C4C1A65994F00592B40 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		84471C4D1A65994F00592B40 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		84A1EC711A63F41E00789AF8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		84AF3C481A63F02A00A8DC5F /* ProximityBLE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProximityBLE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84AF3C4C1A63F02A00A8DC5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84AF3C4D1A63F02A00A8DC5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		84AF3C4F1A63F02A00A8DC5F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		84AF3C501A63F02A00A8DC5F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		84AF3C521A63F02A00A8DC5F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		84AF3C531A63F02A00A8DC5F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		84AF3C521A63F02A00A8DC5F /* DeviceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceListViewController.h; sourceTree = "<group>"; };
+		84AF3C531A63F02A00A8DC5F /* DeviceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceListViewController.m; sourceTree = "<group>"; };
 		84AF3C561A63F02A00A8DC5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84AF3C581A63F02A00A8DC5F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		84AF3C5B1A63F02A00A8DC5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		84AF3C611A63F02A00A8DC5F /* ProximityBLETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProximityBLETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84AF3C661A63F02A00A8DC5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84AF3C671A63F02A00A8DC5F /* ProximityBLETests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProximityBLETests.m; sourceTree = "<group>"; };
+		84E418901A67F6920083A2BD /* ChangeDeviceNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeDeviceNameViewController.h; sourceTree = "<group>"; };
+		84E418911A67F6920083A2BD /* ChangeDeviceNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeDeviceNameViewController.m; sourceTree = "<group>"; };
+		84E418941A6839FA0083A2BD /* companylogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = companylogo.png; sourceTree = "<group>"; };
+		84E418971A683B980083A2BD /* applogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = applogo.png; sourceTree = "<group>"; };
+		84E418991A683D780083A2BD /* buttonback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttonback.png; sourceTree = "<group>"; };
+		84E4915A1A644A54001B1214 /* BLElib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLElib.h; sourceTree = "<group>"; };
+		84E4915B1A644A54001B1214 /* BLElib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLElib.m; sourceTree = "<group>"; };
+		84E4915E1A644C04001B1214 /* SVProgressHUD+iEst527.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD+iEst527.h"; sourceTree = "<group>"; };
+		84E491601A6459F0001B1214 /* rightarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rightarrow.png; sourceTree = "<group>"; };
+		84FD228E1A669311009A3A4C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		84FD22901A669A08009A3A4C /* Equipment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Equipment.h; sourceTree = "<group>"; };
+		84FD22911A669A08009A3A4C /* Equipment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Equipment.m; sourceTree = "<group>"; };
+		84FD22981A66A8F9009A3A4C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		84FD229A1A66A908009A3A4C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		84FD229C1A66A919009A3A4C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +99,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84FD229D1A66A919009A3A4C /* UIKit.framework in Frameworks */,
+				84FD229B1A66A908009A3A4C /* CoreData.framework in Frameworks */,
+				84FD22991A66A8F9009A3A4C /* Foundation.framework in Frameworks */,
 				84A1EC721A63F41E00789AF8 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,9 +116,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		84471C491A65994F00592B40 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				84471C4A1A65994F00592B40 /* SVProgressHUD+utils.h */,
+				84471C4B1A65994F00592B40 /* SVProgressHUD.bundle */,
+				84471C4C1A65994F00592B40 /* SVProgressHUD.h */,
+				84471C4D1A65994F00592B40 /* SVProgressHUD.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 		84A1EC731A63F44400789AF8 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				84471C491A65994F00592B40 /* SVProgressHUD */,
 				84A1EC711A63F41E00789AF8 /* Crashlytics.framework */,
 			);
 			name = Library;
@@ -74,6 +139,13 @@
 		84AF3C3F1A63F02A00A8DC5F = {
 			isa = PBXGroup;
 			children = (
+				84FD229C1A66A919009A3A4C /* UIKit.framework */,
+				84FD229A1A66A908009A3A4C /* CoreData.framework */,
+				84FD22981A66A8F9009A3A4C /* Foundation.framework */,
+				84FD22931A669A19009A3A4C /* Model */,
+				84E4915F1A6459F0001B1214 /* Image */,
+				84E4915D1A644C04001B1214 /* Helper */,
+				84E491591A644A54001B1214 /* Ble */,
 				84A1EC731A63F44400789AF8 /* Library */,
 				84AF3C4A1A63F02A00A8DC5F /* ProximityBLE */,
 				84AF3C641A63F02A00A8DC5F /* ProximityBLETests */,
@@ -93,10 +165,17 @@
 		84AF3C4A1A63F02A00A8DC5F /* ProximityBLE */ = {
 			isa = PBXGroup;
 			children = (
+				84E418901A67F6920083A2BD /* ChangeDeviceNameViewController.h */,
+				84E418911A67F6920083A2BD /* ChangeDeviceNameViewController.m */,
+				84FD228D1A669311009A3A4C /* Model.xcdatamodeld */,
 				84AF3C4F1A63F02A00A8DC5F /* AppDelegate.h */,
 				84AF3C501A63F02A00A8DC5F /* AppDelegate.m */,
-				84AF3C521A63F02A00A8DC5F /* ViewController.h */,
-				84AF3C531A63F02A00A8DC5F /* ViewController.m */,
+				84471C261A65824A00592B40 /* DeviceListItemTableViewCell.h */,
+				84471C271A65824A00592B40 /* DeviceListItemTableViewCell.m */,
+				84AF3C521A63F02A00A8DC5F /* DeviceListViewController.h */,
+				84AF3C531A63F02A00A8DC5F /* DeviceListViewController.m */,
+				84471C461A65908900592B40 /* DeviceDetailViewController.h */,
+				84471C471A65908900592B40 /* DeviceDetailViewController.m */,
 				84AF3C551A63F02A00A8DC5F /* Main.storyboard */,
 				84AF3C581A63F02A00A8DC5F /* Images.xcassets */,
 				84AF3C5A1A63F02A00A8DC5F /* LaunchScreen.xib */,
@@ -129,6 +208,49 @@
 				84AF3C661A63F02A00A8DC5F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		84E491591A644A54001B1214 /* Ble */ = {
+			isa = PBXGroup;
+			children = (
+				84E4915A1A644A54001B1214 /* BLElib.h */,
+				84E4915B1A644A54001B1214 /* BLElib.m */,
+			);
+			path = Ble;
+			sourceTree = "<group>";
+		};
+		84E4915D1A644C04001B1214 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				84E4915E1A644C04001B1214 /* SVProgressHUD+iEst527.h */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		84E4915F1A6459F0001B1214 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				84E418991A683D780083A2BD /* buttonback.png */,
+				84E418971A683B980083A2BD /* applogo.png */,
+				84E418941A6839FA0083A2BD /* companylogo.png */,
+				84471C331A658D3900592B40 /* verbar.png */,
+				84471C291A65867900592B40 /* lock.png */,
+				84471C381A65900600592B40 /* detail.png */,
+				84471C2A1A65867900592B40 /* sel_battery.png */,
+				84471C2B1A65867900592B40 /* unlock.png */,
+				84471C2C1A65867900592B40 /* unsel_battery.png */,
+				84E491601A6459F0001B1214 /* rightarrow.png */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
+		84FD22931A669A19009A3A4C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				84FD22901A669A08009A3A4C /* Equipment.h */,
+				84FD22911A669A08009A3A4C /* Equipment.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,8 +335,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				84AF3C571A63F02A00A8DC5F /* Main.storyboard in Resources */,
+				84471C2D1A65867900592B40 /* lock.png in Resources */,
+				84471C3F1A65900600592B40 /* detail.png in Resources */,
 				84AF3C5C1A63F02A00A8DC5F /* LaunchScreen.xib in Resources */,
+				84E491611A6459F0001B1214 /* rightarrow.png in Resources */,
+				84471C2E1A65867900592B40 /* sel_battery.png in Resources */,
+				84E4189A1A683D780083A2BD /* buttonback.png in Resources */,
+				84E418981A683B980083A2BD /* applogo.png in Resources */,
+				84471C301A65867900592B40 /* unsel_battery.png in Resources */,
+				84E418961A6839FA0083A2BD /* companylogo.png in Resources */,
+				84471C2F1A65867900592B40 /* unlock.png in Resources */,
 				84AF3C591A63F02A00A8DC5F /* Images.xcassets in Resources */,
+				84471C341A658D3900592B40 /* verbar.png in Resources */,
+				84471C4E1A65994F00592B40 /* SVProgressHUD.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,8 +381,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84AF3C541A63F02A00A8DC5F /* ViewController.m in Sources */,
+				84AF3C541A63F02A00A8DC5F /* DeviceListViewController.m in Sources */,
+				84E4915C1A644A54001B1214 /* BLElib.m in Sources */,
 				84AF3C511A63F02A00A8DC5F /* AppDelegate.m in Sources */,
+				84FD228F1A669311009A3A4C /* Model.xcdatamodeld in Sources */,
+				84E418921A67F6920083A2BD /* ChangeDeviceNameViewController.m in Sources */,
+				84471C4F1A65994F00592B40 /* SVProgressHUD.m in Sources */,
+				84471C481A65908900592B40 /* DeviceDetailViewController.m in Sources */,
+				84FD22921A669A08009A3A4C /* Equipment.m in Sources */,
+				84471C281A65824A00592B40 /* DeviceListItemTableViewCell.m in Sources */,
 				84AF3C4E1A63F02A00A8DC5F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -461,6 +601,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		84FD228D1A669311009A3A4C /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				84FD228E1A669311009A3A4C /* Model.xcdatamodel */,
+			);
+			currentVersion = 84FD228E1A669311009A3A4C /* Model.xcdatamodel */;
+			name = Model.xcdatamodeld;
+			path = ../Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 84AF3C401A63F02A00A8DC5F /* Project object */;
 }

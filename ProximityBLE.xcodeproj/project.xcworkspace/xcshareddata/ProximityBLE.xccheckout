@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>624AF927-A0D1-4051-B0FA-3F9258894D37</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ProximityBLE</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E25E7A284E4DF09B5DBEC57357CC1B6E221E7D25</key>
+		<string>https://github.com/ruifeng2357/ProximityBLE</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ProximityBLE.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E25E7A284E4DF09B5DBEC57357CC1B6E221E7D25</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ruifeng2357/ProximityBLE</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E25E7A284E4DF09B5DBEC57357CC1B6E221E7D25</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E25E7A284E4DF09B5DBEC57357CC1B6E221E7D25</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ProximityBLE</string>
+		</dict>
+	</array>
+</dict>
+</plist>

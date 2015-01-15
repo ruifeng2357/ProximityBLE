@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Equipment" representedClassName="Equipment" syncable="YES">
+        <attribute name="autoconnect" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="autodisarm" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="favorites" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="powersave" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Equipment" positionX="-36" positionY="81" width="128" height="133"/>
+    </elements>
+</model>

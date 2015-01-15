@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  DeviceListViewController.h
 //  ProximityBLE
 //
 //  Created by Admin on 1/12/15.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface DeviceListViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
 
 @end
