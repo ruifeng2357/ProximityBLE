@@ -29,6 +29,8 @@
 @interface BLElib: NSObject <CBCentralManagerDelegate, CBPeripheralDelegate>
 @property (nonatomic, assign) id<BLElibDelegate> BLEDelegate;
 
+@property (nonatomic, readwrite) BOOL isRightDevice;
+
 @property (nonatomic, readwrite)        NSInteger                   txDelayCounter;
 @property (nonatomic, retain, strong)   CBCentralManager            *centralManager;
 @property (nonatomic, retain, strong)   CBPeripheral                *connectedPeripheral;

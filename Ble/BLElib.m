@@ -144,6 +144,9 @@
         msgArmCharacteristic = nil;
         msgPowerCharacteristic = nil;
     }
+    
+    self.isRightDevice = NO;
+    
     connectedPeripheral = peripheral;
     [connectedPeripheral setDelegate:self];
     
@@ -165,8 +168,11 @@
         CBUUID *uuid = [(CBService*)[services objectAtIndex:i] UUID];
         if(LOG)
             NSLog(@"didDiscoverServices: found uuid %@", [uuid UUIDString]);
-        //if ([uuid isEqual:SERVICE_UUID] == YES) {
+        
         if ([[uuid UUIDString] isEqualToString:SERVICE_UUID] == YES) {
+            
+            self.isRightDevice = YES;
+            
             connectedService = [services objectAtIndex:i];
             if(LOG)NSLog(@"didDiscoverServices");
 
@@ -364,9 +370,6 @@
     if(LOG)NSLog(@"didWriteValueForCharacteristic:%@", [characteristic value]);
     [BLEDelegate didSendData:[characteristic value]];
 }
-
-
-
 
 #pragma mark -
 #pragma mark Utility

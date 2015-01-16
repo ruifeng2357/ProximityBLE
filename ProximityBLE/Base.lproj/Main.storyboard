@@ -172,17 +172,33 @@
                                 </items>
                             </toolbar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Internal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vxm-kv-z3F">
-                                <rect key="frame" x="155" y="90" width="140" height="28"/>
+                                <rect key="frame" x="180" y="92" width="120" height="28"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="unsel_battery" translatesAutoresizingMaskIntoConstraints="NO" id="iWY-ZE-3fa">
-                                <rect key="frame" x="75" y="135" width="64" height="28"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="battery" translatesAutoresizingMaskIntoConstraints="NO" id="iWY-ZE-3fa">
+                                <rect key="frame" x="70" y="135" width="96" height="32"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="External" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wmP-18-EDW">
-                                <rect key="frame" x="155" y="135" width="140" height="28"/>
+                                <rect key="frame" x="180" y="137" width="120" height="28"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="battery" translatesAutoresizingMaskIntoConstraints="NO" id="wDe-Ys-DwC">
+                                <rect key="frame" x="70" y="90" width="96" height="32"/>
+                                <accessibility key="accessibilityConfiguration" label="internal"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6Q-UW-jez">
+                                <rect key="frame" x="68" y="88" width="96" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hh9-dA-Wf7">
+                                <rect key="frame" x="68" y="135" width="96" height="32"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -190,17 +206,13 @@
                                 <rect key="frame" x="96" y="400" width="128" height="35"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                <state key="normal" title="ARM" backgroundImage="buttonback">
+                                <state key="normal" title="Disarm" backgroundImage="buttonback">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="onArmOrDisarm:" destination="ARp-Fy-g1o" eventType="touchUpInside" id="830-e4-RKO"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sel_battery" translatesAutoresizingMaskIntoConstraints="NO" id="wDe-Ys-DwC">
-                                <rect key="frame" x="75" y="90" width="64" height="28"/>
-                                <accessibility key="accessibilityConfiguration" label="internal"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -213,6 +225,8 @@
                     <connections>
                         <outlet property="buttonArm" destination="nm8-ef-bIN" id="goL-uN-hBG"/>
                         <outlet property="imageArm" destination="ewM-9t-oRb" id="ylT-ST-g6W"/>
+                        <outlet property="labelExternalBattery" destination="hh9-dA-Wf7" id="Aij-PQ-QTK"/>
+                        <outlet property="labelInternalBattery" destination="s6Q-UW-jez" id="C5D-wj-4pv"/>
                         <segue destination="i1t-7z-HfV" kind="push" identifier="toChangeDeviceName" id="Q7a-a1-tX7"/>
                     </connections>
                 </viewController>
@@ -262,11 +276,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="battery" width="96" height="32"/>
         <image name="buttonback" width="128" height="35"/>
         <image name="detail" width="32" height="32"/>
         <image name="lock" width="128" height="128"/>
-        <image name="sel_battery" width="128" height="56"/>
-        <image name="unsel_battery" width="128" height="56"/>
         <image name="verbar" width="30" height="240"/>
     </resources>
 </document>

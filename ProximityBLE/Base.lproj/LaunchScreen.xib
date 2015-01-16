@@ -22,7 +22,7 @@
                     </constraints>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="applogo" translatesAutoresizingMaskIntoConstraints="NO" id="1V0-cL-rfU">
-                    <rect key="frame" x="0.0" y="241" width="320" height="87"/>
+                    <rect key="frame" x="0.0" y="200" width="320" height="87"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="87" id="bFT-iM-M8o"/>
                         <constraint firstAttribute="width" constant="320" id="gWr-MG-Ohs"/>
@@ -33,7 +33,7 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="JQG-bg-93R" secondAttribute="bottom" constant="10" id="JC6-zE-32z"/>
                 <constraint firstItem="1V0-cL-rfU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Kr2-Z3-jfV"/>
-                <constraint firstItem="1V0-cL-rfU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="241" id="hEm-bA-QLx"/>
+                <constraint firstItem="1V0-cL-rfU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="200" id="hEm-bA-QLx"/>
                 <constraint firstItem="JQG-bg-93R" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="iNv-7C-Px9"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>

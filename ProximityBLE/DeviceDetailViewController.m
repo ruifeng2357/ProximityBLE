@@ -11,12 +11,15 @@
 #import "BLElib.h"
 #import "AppDelegate.h"
 #import "Equipment.h"
+#import "iToast.h"
+
+#define EXTERNAL_MAXIMUMVOLTAGE 12800
+#define INTERNAL_MAXIMUMVOLTAGE 4200
 
 @interface DeviceDetailViewController () <BLElibDelegate, ChangeDeviceNameDelegate, UIActionSheetDelegate>
 {
     BOOL isArm;
-    int armVal;
-    int powerVal;
+    char armVal;
     NSString *deviceName;
     UIActionSheet *sheetMenu;
     
@@ -27,6 +30,8 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageArm;
 @property (weak, nonatomic) IBOutlet UIButton *buttonArm;
+@property (weak, nonatomic) IBOutlet UILabel *labelInternalBattery;
+@property (weak, nonatomic) IBOutlet UILabel *labelExternalBattery;
 - (IBAction)onUpdate:(id)sender;
 - (IBAction)onArmOrDisarm:(id)sender;
 
@@ -88,7 +93,6 @@
     
     isArm = YES;
     armVal = 0;
-    powerVal = 0;
     
     self.bleLib = [self appDelegate].bleLib;
     self.bleLib.BLEDelegate = self;
@@ -143,6 +147,14 @@
 
 -(IBAction)onUpdate:(id)sender
 {
+    if (self.bleLib.isRightDevice == NO)
+    {
+        NSString *message = [NSString stringWithFormat:@"This device is not a right one!"];
+        [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+        
+        return;
+    }
+    
     sheetMenu = [[UIActionSheet alloc] initWithTitle:@"Select Operation" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
     [sheetMenu addButtonWithTitle:@"Chanage the device name"];
     if ([self getFavoritesState:[self.bleLib.connectedPeripheral.identifier UUIDString]])
@@ -159,28 +171,47 @@
 }
 
 - (IBAction)onArmOrDisarm:(id)sender {
-    if (isArm)
+    if (self.bleLib.isRightDevice == NO)
     {
-        char val[] = {0x0};
-        NSData *data = [[NSData alloc] initWithBytes:val length:1];
+        NSString *message = [NSString stringWithFormat:@"This device is not a right one!"];
+        [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+        
+        return;
+    }
+    
+    if (isArm == YES)
+    {
+        char sendData = armVal & 0xFE;
+        NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
             isArm = NO;
-            [self.buttonArm setTitle:@"Disarm" forState:UIControlStateNormal];
+            armVal = sendData;
+            [self.buttonArm setTitle:@"Arm" forState:UIControlStateNormal];
             [self.imageArm setImage:[UIImage imageNamed:@"unlock.png"]];
+        }
+        else {
+            NSString *message = [NSString stringWithFormat:@"send failed!"];
+            [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         }
     }
     else
     {
-        char val[] = {0x1};
-        NSData *data = [[NSData alloc] initWithBytes:val length:1];
+        char sendData = armVal | 0xFF;
+        NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
             isArm = YES;
-            [self.buttonArm setTitle:@"Arm" forState:UIControlStateNormal];
+            armVal = sendData;
+            [self.buttonArm setTitle:@"Disarm" forState:UIControlStateNormal];
             [self.imageArm setImage:[UIImage imageNamed:@"lock.png"]];
+        }
+        else
+        {
+            NSString *message = [NSString stringWithFormat:@"send failed!"];
+            [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         }
     }
     
@@ -205,7 +236,15 @@
         {
             [[self appDelegate].managedObjectContext deleteObject:thisEquipment];
             NSError* error = nil;
-            if (![[self appDelegate].managedObjectContext save:&error]) {}
+            if (![[self appDelegate].managedObjectContext save:&error]) {
+                NSString *message = [NSString stringWithFormat:@"removed failed!"];
+                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            }
+            else
+            {
+                NSString *message = [NSString stringWithFormat:@"removed successfully!"];
+                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            }
         }
         else
         {
@@ -217,32 +256,48 @@
             newEquipment.powersave = [NSNumber numberWithBool:NO];
             newEquipment.favorites = [NSNumber numberWithBool:YES];
             NSError* error = nil;
-            if (![[self appDelegate].managedObjectContext save:&error]) {}
+            if (![[self appDelegate].managedObjectContext save:&error]) {
+                NSString *message = [NSString stringWithFormat:@"added failed!"];
+                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            }
+            else
+            {
+                NSString *message = [NSString stringWithFormat:@"added successfully!"];
+                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            }
         }
         
         return;
     }
     else if(buttonIndex == 3) // Select Disarm On Connect
     {
-        int nSendData = armVal & 0xFFFFFFFB;
-        NSData *data = [[NSData alloc] initWithBytes:&nSendData length:sizeof(nSendData)];
+        char sendData = armVal & 0xFB;
+        NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
-            armVal = nSendData;
+            armVal = sendData;
+            [[[[iToast makeText:@"sened successfully!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+        }
+        else
+        {
+            [[[[iToast makeText:@"send failed!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         }
         
         return;
     }
     else if(buttonIndex == 4) // Disable Power Saving Mode
     {
-        int nSendData = armVal & 0xFFFFFFF7;
-        NSData *data = [[NSData alloc] initWithBytes:&nSendData length:sizeof(nSendData)];
+        char sendData = armVal & 0xF7;
+        NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
-            armVal = nSendData;
+            armVal = sendData;
+            [[[[iToast makeText:@"sended successfully"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         }
+        else
+            [[[[iToast makeText:@"send failed"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         
         return;
     }
@@ -293,31 +348,34 @@
 
 - (void) didRecieveData:(CBCharacteristic *)characteristic data:(NSData *)data
 {
+    if (self.bleLib.isRightDevice == NO)
+    {
+        NSString *message = [NSString stringWithFormat:@"This device is not a right one!"];
+        [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+        
+        return;
+    }
+    
     if (self.bleLib.msgArmCharacteristic == characteristic) {
         const char *bytes = [data bytes]; // pointer to the bytes in data
-        NSInteger len = [data length];
+        armVal = bytes[0];
         
-        armVal = 0;
-        for (int i = 0; i < len; i++) {
-            armVal = armVal * 10 + (bytes[i] - 0x30);
-        }
-        
-        // Device Arm | Disarm
+        // Device Arm(= 1) | Disarm (= 0)
         int value = armVal & 0x1;
         if (value == 0)
         {
             isArm = NO;
             [self.buttonArm setTitle:@"Arm" forState:UIControlStateNormal];
-            [self.imageArm setImage:[UIImage imageNamed:@"lock.png"]];
+            [self.imageArm setImage:[UIImage imageNamed:@"unlock.png"]];
         }
         else
         {
             isArm = YES;
             [self.buttonArm setTitle:@"Disarm" forState:UIControlStateNormal];
-            [self.imageArm setImage:[UIImage imageNamed:@"unlock.png"]];
+            [self.imageArm setImage:[UIImage imageNamed:@"lock.png"]];
         }
         
-        // Auto Disarm
+        // Auto Disarm Disable (= 0) | Enable (= 1)
         value = armVal & 0x4;
         if (value == 1)
         {
@@ -328,7 +386,7 @@
             thisEquipment.autodisarm = [NSNumber numberWithBool:NO];
         }
         
-        // Power save mode
+        // Power save mode Disable (= 0) | Enable (= 1)
         value = armVal & 0x8;
         if (value == 1)
         {
@@ -341,7 +399,19 @@
     }
     else if (self.bleLib.msgPowerCharacteristic == characteristic)
     {
-        ;
+        const char *bytes = [data bytes]; // pointer to the bytes in data
+        UInt16 nExternalVoltage = *(UInt16 *)bytes;
+        UInt16 nInternalVoltage = *(UInt16 *)(bytes+2);
+        
+        if (nExternalVoltage >= EXTERNAL_MAXIMUMVOLTAGE)
+            self.labelExternalBattery.text = @"100%";
+        else
+            self.labelExternalBattery.text = [NSString stringWithFormat:@"%d%%", (nExternalVoltage * 100) /EXTERNAL_MAXIMUMVOLTAGE];
+        
+        if (nInternalVoltage >= INTERNAL_MAXIMUMVOLTAGE)
+            self.labelInternalBattery.text = @"100%";
+        else
+            self.labelInternalBattery.text = [NSString stringWithFormat:@"%d%%", (nInternalVoltage * 100) /INTERNAL_MAXIMUMVOLTAGE];
     }
 }
 
