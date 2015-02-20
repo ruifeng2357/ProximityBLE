@@ -11,13 +11,16 @@
 #import <UIKit/UIKit.h>
 
 #define SERVICE_UUID @"96378944-3148-11E4-8944-0002A5D5C51B"
+//#define SERVICE_UUID @"FEFD358F-0207-4654-BD83-9108E1EDF99F"
+//#define SERVICE_UUID @"3803B95A-A6A1-D70B-973E-01B5F9D76A5D"
 
 @protocol BLElibDelegate <NSObject>
+
 - (void) didFoundPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI;
 - (void) didConnectPeripheral:(CBPeripheral *)peripheral;
 - (void) didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error;
 - (void) didDisconnectPeripheral:(CBPeripheral *)peripheral;
-- (void) didRecieveData:(CBCharacteristic *)characteristic data:(NSData *)data;
+- (void) didReceiveData:(CBCharacteristic *)characteristic data:(NSData *)data;
 - (void) didSendData:(NSData *)data;
 - (void) didDiscoverServices;
 - (void) didDiscoverCharacteristics;
@@ -27,6 +30,13 @@
 
 
 @interface BLElib: NSObject <CBCentralManagerDelegate, CBPeripheralDelegate>
+{
+    NSTimer *timer;
+    BOOL bConnecting;
+    int connectingTimeout;
+    CBPeripheral *connectingPeripheral;
+}
+
 @property (nonatomic, assign) id<BLElibDelegate> BLEDelegate;
 
 @property (nonatomic, readwrite) BOOL isRightDevice;

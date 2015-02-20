@@ -150,9 +150,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="ewM-9t-oRb">
-                                <rect key="frame" x="96" y="220" width="128" height="128"/>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="verbar" translatesAutoresizingMaskIntoConstraints="NO" id="4NS-g0-VZH">
                                 <rect key="frame" x="5" y="200" width="30" height="240"/>
                             </imageView>
@@ -213,6 +210,9 @@
                                     <action selector="onArmOrDisarm:" destination="ARp-Fy-g1o" eventType="touchUpInside" id="830-e4-RKO"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="closelock" translatesAutoresizingMaskIntoConstraints="NO" id="ewM-9t-oRb">
+                                <rect key="frame" x="75" y="216" width="170" height="135"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -278,8 +278,8 @@
     <resources>
         <image name="battery" width="96" height="32"/>
         <image name="buttonback" width="128" height="35"/>
+        <image name="closelock" width="170" height="135"/>
         <image name="detail" width="32" height="32"/>
-        <image name="lock" width="128" height="128"/>
         <image name="verbar" width="30" height="240"/>
     </resources>
 </document>

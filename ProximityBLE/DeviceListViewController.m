@@ -12,8 +12,10 @@
 #import "AppDelegate.h"
 #import "SVProgressHUD+iEst527.h"
 #import "Equipment.h"
+#import "iToast.h"
+#import "DBManager.h"
 
-#define TIME_PERIOD 3
+#define TIME_PERIOD 10
 
 @interface DeviceListViewController () <BLElibDelegate>
 {
@@ -25,8 +27,9 @@
 }
 
 @property (nonatomic, weak) BLElib *bleLib;
-@property (nonatomic, retain) NSMutableArray *arrayFoundedEquip;
+@property (nonatomic, retain) NSMutableArray *arrayFavoriteEquip;
 @property (nonatomic, retain) NSMutableArray *arrayShowEquip;
+@property (nonatomic, retain) NSMutableArray *arrayFoundEquip;
 
 @property (nonatomic, weak) IBOutlet UITableView *table;
 @property (nonatomic, weak) IBOutlet UIBarItem *toolBar;
@@ -42,47 +45,30 @@
     return (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
-- (void) loadEquipments
-{
-    if (arraySavedEquip)
-        arraySavedEquip = nil;
-    
-    arraySavedEquip = [[NSMutableArray alloc] init];
-    
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Equipment" inManagedObjectContext:[self appDelegate].managedObjectContext];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entity];
-    
-    NSError *error = nil;
-    NSArray *fetchedObjects = [[self appDelegate].managedObjectContext executeFetchRequest:request error:&error];
-    
-    for (int i = 0; i < fetchedObjects.count; i++) {
-        Equipment *newEquip = (Equipment *)[fetchedObjects objectAtIndex:i];
-        [arraySavedEquip addObject:newEquip];
-    }
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    self.bleLib = [self appDelegate].bleLib;
-    self.bleLib.BLEDelegate = self;
-    
-    [self loadEquipments];
+    timerCount = 0;
+    isscanning = NO;
+    self.arrayFavoriteEquip = [[NSMutableArray alloc] init];
+    self.arrayShowEquip = [[NSMutableArray alloc] init];
+    self.arrayFoundEquip = [[NSMutableArray alloc] init];
+    arraySavedEquip = [[NSMutableArray alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    timerCount = 0;
-    isscanning = NO;
-    [self loadEquipments];
-    self.arrayFoundedEquip = [[NSMutableArray alloc] init];
-    self.arrayShowEquip = [[NSMutableArray alloc] init];
-    self.bleLib.BLEDelegate = self;
+    [self refreshPeripheralList];
     
-    [self.table reloadData];
+    self.bleLib = [self appDelegate].bleLib;
+    self.bleLib.BLEDelegate = self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,7 +93,7 @@
 {
     if (section == 0)
     {
-        return arraySavedEquip.count;
+        return self.arrayFavoriteEquip.count;
     }
     else if (section == 1)
         return self.arrayShowEquip.count;
@@ -123,11 +109,8 @@ static DeviceListItemTableViewCell *viewItem;
     
     if (indexPath.section == 0)
     {
-        Equipment *equip = (Equipment *)[arraySavedEquip objectAtIndex:indexPath.row];
-        if (equip != nil && equip.name.length > 0)
-            labelName.text = equip.name;
-        else
-            labelName.text = @"No Name";
+        Equipment *equip = (Equipment *)[self.arrayFavoriteEquip objectAtIndex:indexPath.row];
+        labelName.text = [[DBManager sharedDBManager] getEquipNameWithUUID:equip.uuid];
         
         if (![self isActiveEquipment:equip.uuid])
         {
@@ -142,11 +125,19 @@ static DeviceListItemTableViewCell *viewItem;
     }
     else
     {
-        CBPeripheral *peripheral = [self.arrayShowEquip objectAtIndex:indexPath.row];
-        if (peripheral != nil && peripheral.name.length > 0)
-            labelName.text = peripheral.name;
+        Equipment *equip = (Equipment *)[self.arrayShowEquip objectAtIndex:indexPath.row];
+        labelName.text = [[DBManager sharedDBManager] getEquipNameWithUUID:equip.uuid];
+        
+        if (![self isActiveEquipment:equip.uuid])
+        {
+            [viewItem setUserInteractionEnabled:NO];
+            [viewItem setBackgroundColor:[UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:0.2f]];
+        }
         else
-            labelName.text = @"No Name";
+        {
+            [viewItem setUserInteractionEnabled:YES];
+            [viewItem setBackgroundColor:[UIColor whiteColor]];
+        }
     }
     
     viewItem.selectionStyle = UITableViewCellStyleDefault;
@@ -176,23 +167,48 @@ static DeviceListItemTableViewCell *viewItem;
 
 -(void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row >= self.arrayShowEquip.count)
+    if (self.bleLib.centralManager.state == CBCentralManagerStatePoweredOff)
+    {
+        [[[[iToast makeText:@"Bluetooth is currently powered off."] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         return;
+    }
+    
+    if (indexPath.section == 0) {
+        if (indexPath.row >= self.arrayFavoriteEquip.count)
+            return;
+    } else {
+        if (indexPath.row >= self.arrayShowEquip.count)
+            return;
+    }
     
     if (indexPath.section == 0)
     {
-        Equipment* equip = (Equipment*)[arraySavedEquip objectAtIndex:indexPath.row];
+        Equipment* equip = (Equipment*)[self.arrayFavoriteEquip objectAtIndex:indexPath.row];
         
         SHOW_PROGRESS(@"Connecting...");
+    
+        if (self.bleLib.connectedPeripheral != nil)
+        {
+            if ([self.bleLib isConnectedWithPeripheral:self.bleLib.connectedPeripheral])
+                [self.bleLib disconnectPeripheral:self.bleLib.connectedPeripheral];
+        }
         
         CBPeripheral *peripheral = [self getPeripheral:equip.uuid];
         [self.bleLib connectPeripheral:peripheral];
     }
     else
     {
+        Equipment* equip = (Equipment*)[self.arrayShowEquip objectAtIndex:indexPath.row];
+        
         SHOW_PROGRESS(@"Connecting...");
         
-        CBPeripheral *peripheral = [self.arrayShowEquip objectAtIndex:indexPath.row];
+        if (self.bleLib.connectedPeripheral != nil)
+        {
+            if ([self.bleLib isConnectedWithPeripheral:self.bleLib.connectedPeripheral])
+                [self.bleLib disconnectPeripheral:self.bleLib.connectedPeripheral];
+        }
+        
+        CBPeripheral *peripheral = [self getPeripheral:equip.uuid];
         [self.bleLib connectPeripheral:peripheral];
     }
     
@@ -201,10 +217,17 @@ static DeviceListItemTableViewCell *viewItem;
 
 - (IBAction) onScan:(id)sender
 {
+    if (self.bleLib.centralManager.state == CBCentralManagerStatePoweredOff)
+    {
+        [[[[iToast makeText:@"Bluetooth is currently powered off."] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+        return;
+    }
+    
     if (isscanning == YES)
         return;
     
-    [self.arrayFoundedEquip removeAllObjects];
+    [self.arrayFoundEquip removeAllObjects];
+    [self.arrayFavoriteEquip removeAllObjects];
     [self.arrayShowEquip removeAllObjects];
     
     [self.toolBar setTitle:@"Scanning..."];
@@ -212,7 +235,7 @@ static DeviceListItemTableViewCell *viewItem;
     isscanning = YES;
     timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown:) userInfo:nil repeats:YES];
     
-    [self.bleLib startScanningForUUIDString:@""];
+    [self.bleLib startScanningForUUIDString:SERVICE_UUID];
 }
 
 -(void) countDown:(NSTimer*)localTimer
@@ -232,9 +255,9 @@ static DeviceListItemTableViewCell *viewItem;
 {
     BOOL isActive = NO;
     
-    if (self.arrayFoundedEquip != nil) {
-        for (int i = 0; i < self.arrayFoundedEquip.count; i++) {
-            CBPeripheral *perip = (CBPeripheral *)[self.arrayFoundedEquip objectAtIndex:i];
+    if (self.arrayFoundEquip != nil) {
+        for (int i = 0; i < self.arrayFoundEquip.count; i++) {
+            CBPeripheral *perip = (CBPeripheral *)[self.arrayFoundEquip objectAtIndex:i];
             if (perip != nil)
             {
                 if ([[perip.identifier UUIDString] isEqualToString:uuid])
@@ -252,8 +275,8 @@ static DeviceListItemTableViewCell *viewItem;
 - (CBPeripheral *)getPeripheral:(NSString *)uuid
 {
     CBPeripheral *periph = nil;
-    for (int i = 0; i < self.arrayFoundedEquip.count; i++) {
-        CBPeripheral* tempperiph = (CBPeripheral *)[self.arrayFoundedEquip objectAtIndex:i];
+    for (int i = 0; i < self.arrayFoundEquip.count; i++) {
+        CBPeripheral* tempperiph = (CBPeripheral *)[self.arrayFoundEquip objectAtIndex:i];
         if (tempperiph != nil)
         {
             if ([[tempperiph.identifier UUIDString] isEqualToString:uuid])
@@ -271,37 +294,52 @@ static DeviceListItemTableViewCell *viewItem;
 {
     if (isscanning == YES)
     {
-        if (![self.arrayFoundedEquip containsObject:peripheral]) {
-            BOOL isExist = NO;
-            if (arraySavedEquip != nil)
-            {
-                for (int i = 0; i < arraySavedEquip.count; i++) {
-                    Equipment* equip = (Equipment *) [arraySavedEquip objectAtIndex:i];
-                    if ( equip != nil )
-                    {
-                        if ([equip.uuid isEqualToString:[peripheral.identifier UUIDString]])
-                        {
-                            isExist = YES;
-                            break;
-                        }
-                    }
-                }
+        [[DBManager sharedDBManager] saveEquipment:peripheral];
+        BOOL bFlag = NO;
+        for (int i = 0; i < self.arrayFoundEquip.count; i++) {
+            CBPeripheral *periph = (CBPeripheral *)[self.arrayFoundEquip objectAtIndex:i];
+            if ([[periph.identifier UUIDString] isEqualToString:[peripheral.identifier UUIDString]]) {
+                bFlag = YES;
+                break;
             }
-            
-            if (isExist == NO)
-                [self.arrayShowEquip addObject:peripheral];
-            
-            [self.arrayFoundedEquip addObject:peripheral];
-            
-            dispatch_async(dispatch_get_main_queue(), ^() {
-                [self.table reloadData];
-            });
+        }
+        
+        if (bFlag == NO)
+            [self.arrayFoundEquip addObject:peripheral];
+        [self refreshPeripheralList];
+    }
+}
+
+- (void) refreshPeripheralList
+{
+    if (self.arrayFoundEquip == nil || self.arrayFoundEquip.count == 0)
+        return;
+    if (arraySavedEquip == nil)
+        return;
+    
+    self.arrayShowEquip = [[NSMutableArray alloc] init];
+    self.arrayFavoriteEquip = [[NSMutableArray alloc] init];
+    arraySavedEquip = (NSMutableArray *)[[DBManager sharedDBManager] getAllEquipments];
+    
+    for (int i = 0; i < arraySavedEquip.count; i++) {
+        Equipment* equip = (Equipment *) [arraySavedEquip objectAtIndex:i];
+        if ( [[DBManager sharedDBManager] getEquipFavoriteStatusWithUUID:equip.uuid] )
+            [self.arrayFavoriteEquip addObject:equip];
+        else
+        {
+            if ([self isActiveEquipment:equip.uuid])
+                [self.arrayShowEquip addObject:equip];
         }
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        [self.table reloadData];
+    });
 }
 
 - (void) didConnectPeripheral:(CBPeripheral *)peripheral {
     HIDE_PROGRESS_WITH_SUCCESS(@"Connected");
+    [self.bleLib stopScanning];
     dispatch_async(dispatch_get_main_queue(), ^() {
         [self performSegueWithIdentifier:@"DeviceDetail" sender:self];
     });

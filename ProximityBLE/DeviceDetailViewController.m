@@ -12,13 +12,14 @@
 #import "AppDelegate.h"
 #import "Equipment.h"
 #import "iToast.h"
+#import "DBManager.h"
 
 #define EXTERNAL_MAXIMUMVOLTAGE 12800
 #define INTERNAL_MAXIMUMVOLTAGE 4200
 
 @interface DeviceDetailViewController () <BLElibDelegate, ChangeDeviceNameDelegate, UIActionSheetDelegate>
 {
-    BOOL isArm;
+    BOOL isArmed;
     char armVal;
     NSString *deviceName;
     UIActionSheet *sheetMenu;
@@ -63,52 +64,19 @@
     return array;
 }
 
--(BOOL) getFavoritesState:(NSString *)uuid
-{
-    BOOL isAdded = NO;
-    
-    NSMutableArray *array = [[NSMutableArray alloc] init];
-    array = [self loadEquipments];
-    
-    isAdded = NO;
-    for (int i = 0; i <array.count; i++) {
-        thisEquipment = (Equipment *)[array objectAtIndex:i];
-        if (thisEquipment != nil)
-        {
-            if ([thisEquipment.uuid isEqualToString:uuid])
-            {
-                isAdded = YES;
-                break;
-            }
-        }
-    }
-    
-    return isAdded;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    isArm = YES;
+    isArmed = NO;
     armVal = 0;
     
     self.bleLib = [self appDelegate].bleLib;
     self.bleLib.BLEDelegate = self;
     [self.bleLib discoverServicesForConnectedPeripheral];
     
-    if ([self getFavoritesState:[self.bleLib.connectedPeripheral.identifier UUIDString]])
-    {
-        deviceName = thisEquipment.name;
-    }
-    else
-    {
-        if (self.bleLib.connectedPeripheral != nil && self.bleLib.connectedPeripheral.name.length > 0)
-            deviceName = self.bleLib.connectedPeripheral.name;
-        else
-            deviceName = @"No Name";
-    }
+    deviceName = [[DBManager sharedDBManager] getEquipNameWithUUID:[self.bleLib.connectedPeripheral.identifier UUIDString]];
     
     UIBarButtonItem *buttonBack = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:self action:@selector(onBack:)];
     self.navigationItem.leftBarButtonItem = buttonBack;
@@ -119,7 +87,7 @@
 {
     if ([self.bleLib isConnectedWithPeripheral:self.bleLib.connectedPeripheral])
         [self.bleLib disconnectPeripheral:self.bleLib.connectedPeripheral];
-    
+
     self.bleLib.BLEDelegate = nil;
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -156,14 +124,27 @@
     }
     
     sheetMenu = [[UIActionSheet alloc] initWithTitle:@"Select Operation" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
-    [sheetMenu addButtonWithTitle:@"Chanage the device name"];
-    if ([self getFavoritesState:[self.bleLib.connectedPeripheral.identifier UUIDString]])
+    [sheetMenu addButtonWithTitle:@"Change the device name"];
+    if ([[DBManager sharedDBManager] getEquipFavoriteStatusWithUUID:[self.bleLib.connectedPeripheral.identifier UUIDString]])
         [sheetMenu addButtonWithTitle:@"Remove from favorite list"];
     else
         [sheetMenu addButtonWithTitle:@"Add to favorite list"];
-    [sheetMenu addButtonWithTitle:@"Select disarm on connect"];
+    /*
+     * 2015-02-18 Fix me
+    if ([thisEquipment.autodisarm boolValue] == YES)
+        [sheetMenu addButtonWithTitle:@"Disable disarm on connect"];
+    else {
+        [sheetMenu addButtonWithTitle:@"Enable disarm on connect"];
+    }
+     */
+    
     //[sheetMenu addButtonWithTitle:@"Select Auto Reconnect"];
-    [sheetMenu addButtonWithTitle:@"Disable power saving mode"];
+    if ([thisEquipment.powersave boolValue] == YES)
+        [sheetMenu addButtonWithTitle:@"Disable power saving mode"];
+    else
+        [sheetMenu addButtonWithTitle:@"Enable power saving mode"];
+    
+    [sheetMenu addButtonWithTitle:@"Disconnect device"];
     UIView *keyView = [[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0];
     [sheetMenu showInView:keyView];
     
@@ -179,17 +160,17 @@
         return;
     }
     
-    if (isArm == YES)
+    if (isArmed == YES)
     {
         char sendData = armVal & 0xFE;
         NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
-            isArm = NO;
+            isArmed = NO;
             armVal = sendData;
             [self.buttonArm setTitle:@"Arm" forState:UIControlStateNormal];
-            [self.imageArm setImage:[UIImage imageNamed:@"unlock.png"]];
+            [self.imageArm setImage:[UIImage imageNamed:@"openlock.png"]];
         }
         else {
             NSString *message = [NSString stringWithFormat:@"send failed!"];
@@ -198,15 +179,15 @@
     }
     else
     {
-        char sendData = armVal | 0xFF;
+        char sendData = armVal | 0x01;
         NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
-            isArm = YES;
+            isArmed = YES;
             armVal = sendData;
             [self.buttonArm setTitle:@"Disarm" forState:UIControlStateNormal];
-            [self.imageArm setImage:[UIImage imageNamed:@"lock.png"]];
+            [self.imageArm setImage:[UIImage imageNamed:@"closelock.png"]];
         }
         else
         {
@@ -232,52 +213,45 @@
     }
     else if(buttonIndex == 2) // Add Device To Favorite List
     {
-        if ([self getFavoritesState:[self.bleLib.connectedPeripheral.identifier UUIDString]])
+        BOOL ret = NO;
+        if ([[DBManager sharedDBManager] getEquipFavoriteStatusWithUUID:[self.bleLib.connectedPeripheral.identifier UUIDString]])
         {
-            [[self appDelegate].managedObjectContext deleteObject:thisEquipment];
-            NSError* error = nil;
-            if (![[self appDelegate].managedObjectContext save:&error]) {
-                NSString *message = [NSString stringWithFormat:@"removed failed!"];
-                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
-            }
-            else
-            {
-                NSString *message = [NSString stringWithFormat:@"removed successfully!"];
-                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            ret = [[DBManager sharedDBManager] updateFavoriteStatus:[self.bleLib.connectedPeripheral.identifier UUIDString] status:NO];
+            if (ret == YES) {
+                [[[[iToast makeText:@"removed successfully!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            } else {
+                [[[[iToast makeText:@"remove failed!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
             }
         }
         else
         {
-            Equipment* newEquipment = [NSEntityDescription insertNewObjectForEntityForName:@"Equipment" inManagedObjectContext:[self appDelegate].managedObjectContext];
-            newEquipment.uuid = [self.bleLib.connectedPeripheral.identifier UUIDString];
-            newEquipment.name = deviceName;
-            newEquipment.autoconnect = [NSNumber numberWithBool:NO];
-            newEquipment.autodisarm = [NSNumber numberWithBool:NO];
-            newEquipment.powersave = [NSNumber numberWithBool:NO];
-            newEquipment.favorites = [NSNumber numberWithBool:YES];
-            NSError* error = nil;
-            if (![[self appDelegate].managedObjectContext save:&error]) {
-                NSString *message = [NSString stringWithFormat:@"added failed!"];
-                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
-            }
-            else
-            {
-                NSString *message = [NSString stringWithFormat:@"added successfully!"];
-                [[[[iToast makeText:message] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            ret = [[DBManager sharedDBManager] updateFavoriteStatus:[self.bleLib.connectedPeripheral.identifier UUIDString] status:YES];
+            if (ret == YES) {
+                [[[[iToast makeText:@"added successfully!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            } else {
+                [[[[iToast makeText:@"add failed!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
             }
         }
         
         return;
     }
+    /*
+     * 2015-02-18 Fix me
     else if(buttonIndex == 3) // Select Disarm On Connect
     {
-        char sendData = armVal & 0xFB;
+        char sendData;
+        
+        if ([thisEquipment.autodisarm boolValue] == YES)
+            sendData = armVal & 0xFB;
+        else
+            sendData = armVal | 0x40;
         NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
             armVal = sendData;
-            [[[[iToast makeText:@"sened successfully!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            thisEquipment.autodisarm = [NSNumber numberWithBool: ![thisEquipment.autodisarm boolValue]];
+            [[[[iToast makeText:@"sent successfully!"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         }
         else
         {
@@ -286,20 +260,36 @@
         
         return;
     }
-    else if(buttonIndex == 4) // Disable Power Saving Mode
+     */
+    else if(buttonIndex == 3) // Disable Power Saving Mode
     {
-        char sendData = armVal & 0xF7;
+        char sendData;
+        
+        if ([thisEquipment.powersave boolValue] == YES)
+            sendData = armVal & 0xFB;
+        else
+            sendData = armVal | 0x04;
         NSData *data = [[NSData alloc] initWithBytes:&sendData length:sizeof(sendData)];
         
         BOOL bRet = [self.bleLib sendData:data];
         if (bRet) {
             armVal = sendData;
-            [[[[iToast makeText:@"sended successfully"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
+            thisEquipment.powersave = [NSNumber numberWithBool: ![thisEquipment.powersave boolValue]];
+            [[[[iToast makeText:@"sent successfully"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         }
         else
             [[[[iToast makeText:@"send failed"] setGravity:iToastGravityBottom] setDuration:iToastDurationNormal] show];
         
         return;
+    }
+    else if (buttonIndex == 4)
+    {
+        if ([self.bleLib isConnectedWithPeripheral:self.bleLib.connectedPeripheral])
+            [self.bleLib disconnectPeripheral:self.bleLib.connectedPeripheral];
+    
+        self.bleLib.BLEDelegate = nil;
+        
+       [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -317,22 +307,7 @@
     deviceName = name;
     self.navigationItem.title = deviceName;
     
-    if ([self getFavoritesState:[self.bleLib.connectedPeripheral.identifier UUIDString]])
-    {
-        if (thisEquipment != nil)
-        {
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Equipment"];
-            NSPredicate *predicate=[NSPredicate predicateWithFormat:@"uuid==%@", thisEquipment.uuid]; // If required to fetch specific vehicle
-            fetchRequest.predicate=predicate;
-            Equipment *updateEquip = [[[self appDelegate].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
-            
-            if (updateEquip != nil)
-            {
-                [updateEquip setValue:deviceName forKey:@"name"];
-                [[self appDelegate].managedObjectContext save:nil];
-            }
-        }
-    }
+    [[DBManager sharedDBManager] updateEquipmentName:[self.bleLib.connectedPeripheral.identifier UUIDString] name:name];
 }
 
 #pragma mark - BLEDelegate
@@ -346,8 +321,8 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void) didRecieveData:(CBCharacteristic *)characteristic data:(NSData *)data
-{
+- (void) didReceiveData:(CBCharacteristic *)characteristic data:(NSData *)data
+{    
     if (self.bleLib.isRightDevice == NO)
     {
         NSString *message = [NSString stringWithFormat:@"This device is not a right one!"];
@@ -360,21 +335,25 @@
         const char *bytes = [data bytes]; // pointer to the bytes in data
         armVal = bytes[0];
         
-        // Device Arm(= 1) | Disarm (= 0)
-        int value = armVal & 0x1;
+        // Device Armed(= 1) | Disarmed (= 0)
+        int value = armVal & 0x01;
         if (value == 0)
         {
-            isArm = NO;
+            isArmed = NO;
             [self.buttonArm setTitle:@"Arm" forState:UIControlStateNormal];
-            [self.imageArm setImage:[UIImage imageNamed:@"unlock.png"]];
+            [self.imageArm setImage:[UIImage imageNamed:@"openlock.png"]];
         }
         else
         {
-            isArm = YES;
+            isArmed = YES;
             [self.buttonArm setTitle:@"Disarm" forState:UIControlStateNormal];
-            [self.imageArm setImage:[UIImage imageNamed:@"lock.png"]];
+            [self.imageArm setImage:[UIImage imageNamed:@"closelock.png"]];
         }
         
+        /*
+         * 2015-02-20 Fix me
+         */
+        /*
         // Auto Disarm Disable (= 0) | Enable (= 1)
         value = armVal & 0x4;
         if (value == 1)
@@ -385,16 +364,20 @@
         {
             thisEquipment.autodisarm = [NSNumber numberWithBool:NO];
         }
+         */
+        /*
+         *
+         */
         
-        // Power save mode Disable (= 0) | Enable (= 1)
-        value = armVal & 0x8;
+        // Power save mode Enabled (= 1) | Disabled (= 0)
+        value = armVal & 0x04;
         if (value == 1)
         {
-            thisEquipment.powersave = [NSNumber numberWithBool:NO];
+            thisEquipment.powersave = [NSNumber numberWithBool:YES];
         }
         else
         {
-            thisEquipment.powersave = [NSNumber numberWithBool:YES];
+            thisEquipment.powersave = [NSNumber numberWithBool:NO];
         }
     }
     else if (self.bleLib.msgPowerCharacteristic == characteristic)
@@ -406,12 +389,24 @@
         if (nExternalVoltage >= EXTERNAL_MAXIMUMVOLTAGE)
             self.labelExternalBattery.text = @"100%";
         else
-            self.labelExternalBattery.text = [NSString stringWithFormat:@"%d%%", (nExternalVoltage * 100) /EXTERNAL_MAXIMUMVOLTAGE];
+        {
+            int nPercent= (nExternalVoltage * 100) / EXTERNAL_MAXIMUMVOLTAGE;
+            if (nPercent == 0)
+                self.labelExternalBattery.text = @"-";
+            else
+                self.labelExternalBattery.text = [NSString stringWithFormat:@"%d%%", nPercent];
+        }
         
         if (nInternalVoltage >= INTERNAL_MAXIMUMVOLTAGE)
             self.labelInternalBattery.text = @"100%";
         else
-            self.labelInternalBattery.text = [NSString stringWithFormat:@"%d%%", (nInternalVoltage * 100) /INTERNAL_MAXIMUMVOLTAGE];
+        {
+            int nPercent = (nInternalVoltage * 100) / INTERNAL_MAXIMUMVOLTAGE;
+            if (nPercent == 0)
+                self.labelInternalBattery.text = @"-";
+            else
+                self.labelInternalBattery.text = [NSString stringWithFormat:@"%d%%", nPercent];
+        }
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8405533B1A8A5368009DB1E0 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8405533A1A8A5368009DB1E0 /* DBManager.m */; };
 		84471C281A65824A00592B40 /* DeviceListItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84471C271A65824A00592B40 /* DeviceListItemTableViewCell.m */; };
 		84471C2D1A65867900592B40 /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C291A65867900592B40 /* lock.png */; };
 		84471C2F1A65867900592B40 /* unlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 84471C2B1A65867900592B40 /* unlock.png */; };
@@ -18,6 +19,8 @@
 		848723CE1A6914E0007ACB20 /* battery.png in Resources */ = {isa = PBXBuildFile; fileRef = 848723CD1A6914E0007ACB20 /* battery.png */; };
 		848723D21A691C45007ACB20 /* iToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 848723D11A691C45007ACB20 /* iToast.m */; };
 		84A1EC721A63F41E00789AF8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A1EC711A63F41E00789AF8 /* Crashlytics.framework */; };
+		84AAE92D1A7C0D4500F00BD8 /* openlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AAE92C1A7C0D4500F00BD8 /* openlock.png */; };
+		84AF2D9D1A792ADA00D1AC07 /* closelock.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AF2D9C1A792ADA00D1AC07 /* closelock.png */; };
 		84AF3C4E1A63F02A00A8DC5F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C4D1A63F02A00A8DC5F /* main.m */; };
 		84AF3C511A63F02A00A8DC5F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C501A63F02A00A8DC5F /* AppDelegate.m */; };
 		84AF3C541A63F02A00A8DC5F /* DeviceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3C531A63F02A00A8DC5F /* DeviceListViewController.m */; };
@@ -55,6 +58,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		840553391A8A5368009DB1E0 /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
+		8405533A1A8A5368009DB1E0 /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		84471C261A65824A00592B40 /* DeviceListItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceListItemTableViewCell.h; sourceTree = "<group>"; };
 		84471C271A65824A00592B40 /* DeviceListItemTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceListItemTableViewCell.m; sourceTree = "<group>"; };
 		84471C291A65867900592B40 /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
@@ -71,6 +76,8 @@
 		848723D01A691C45007ACB20 /* iToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iToast.h; sourceTree = "<group>"; };
 		848723D11A691C45007ACB20 /* iToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iToast.m; sourceTree = "<group>"; };
 		84A1EC711A63F41E00789AF8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		84AAE92C1A7C0D4500F00BD8 /* openlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = openlock.png; sourceTree = "<group>"; };
+		84AF2D9C1A792ADA00D1AC07 /* closelock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closelock.png; sourceTree = "<group>"; };
 		84AF3C481A63F02A00A8DC5F /* ProximityBLE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProximityBLE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84AF3C4C1A63F02A00A8DC5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84AF3C4D1A63F02A00A8DC5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -188,6 +195,8 @@
 		84AF3C4A1A63F02A00A8DC5F /* ProximityBLE */ = {
 			isa = PBXGroup;
 			children = (
+				840553391A8A5368009DB1E0 /* DBManager.h */,
+				8405533A1A8A5368009DB1E0 /* DBManager.m */,
 				84E418901A67F6920083A2BD /* ChangeDeviceNameViewController.h */,
 				84E418911A67F6920083A2BD /* ChangeDeviceNameViewController.m */,
 				84FD228D1A669311009A3A4C /* Model.xcdatamodeld */,
@@ -253,6 +262,8 @@
 		84E4915F1A6459F0001B1214 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				84AAE92C1A7C0D4500F00BD8 /* openlock.png */,
+				84AF2D9C1A792ADA00D1AC07 /* closelock.png */,
 				84B2B9BE1A6983600022BC8B /* icon29@2x.png */,
 				84B2B9BF1A6983600022BC8B /* icon29@3x.png */,
 				84B2B9C01A6983600022BC8B /* icon40@2x.png */,
@@ -331,6 +342,11 @@
 				TargetAttributes = {
 					84AF3C471A63F02A00A8DC5F = {
 						CreatedOnToolsVersion = 6.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					84AF3C601A63F02A00A8DC5F = {
 						CreatedOnToolsVersion = 6.1;
@@ -364,6 +380,7 @@
 			files = (
 				84B2B9C91A6983600022BC8B /* icon60@3x.png in Resources */,
 				84B2B9C71A6983600022BC8B /* icon40@3x.png in Resources */,
+				84AAE92D1A7C0D4500F00BD8 /* openlock.png in Resources */,
 				84AF3C571A63F02A00A8DC5F /* Main.storyboard in Resources */,
 				84471C2D1A65867900592B40 /* lock.png in Resources */,
 				84B2B9C81A6983600022BC8B /* icon60@2x.png in Resources */,
@@ -373,6 +390,7 @@
 				84E4189A1A683D780083A2BD /* buttonback.png in Resources */,
 				84E418981A683B980083A2BD /* applogo.png in Resources */,
 				84B2B9C61A6983600022BC8B /* icon40@2x.png in Resources */,
+				84AF2D9D1A792ADA00D1AC07 /* closelock.png in Resources */,
 				84E418961A6839FA0083A2BD /* companylogo.png in Resources */,
 				84B2B9C51A6983600022BC8B /* icon29@3x.png in Resources */,
 				84471C2F1A65867900592B40 /* unlock.png in Resources */,
@@ -404,7 +422,7 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "./Crashlytics.framework/run e467cd6020d75f85b44de28ff41ad8839ce00efd f762b897362d8438ff42d87f9a5f45630ee0417acac088ae4123b1c79069ba45";
+			shellPath = "./Crashlytics.framework/run faa118da135da5df982c35128465d869fd223227 9c1a0bd62ed20d5b9babc318b3aaa009b574040f436b84820a8994fe1a8203d8";
 			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -417,6 +435,7 @@
 				84AF3C541A63F02A00A8DC5F /* DeviceListViewController.m in Sources */,
 				84E4915C1A644A54001B1214 /* BLElib.m in Sources */,
 				84AF3C511A63F02A00A8DC5F /* AppDelegate.m in Sources */,
+				8405533B1A8A5368009DB1E0 /* DBManager.m in Sources */,
 				84FD228F1A669311009A3A4C /* Model.xcdatamodeld in Sources */,
 				84E418921A67F6920083A2BD /* ChangeDeviceNameViewController.m in Sources */,
 				84471C4F1A65994F00592B40 /* SVProgressHUD.m in Sources */,
@@ -546,6 +565,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Carl-Gustav Ekstrom (RCB9WKT8N2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Carl-Gustav Ekstrom (RCB9WKT8N2)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -560,6 +581,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Carl-Gustav Ekstrom (RCB9WKT8N2)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

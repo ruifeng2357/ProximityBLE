@@ -17,7 +17,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [Crashlytics startWithAPIKey:@"e467cd6020d75f85b44de28ff41ad8839ce00efd"];
+    [Crashlytics startWithAPIKey:@"faa118da135da5df982c35128465d869fd223227"];
     
     self.bleLib = [[BLElib alloc] init];
     

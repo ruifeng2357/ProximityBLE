@@ -12,6 +12,8 @@
 #define CHARACTERISTIC_ARM      @"96378945-3148-11E4-8944-0002A5D5C51B"
 #define CHARACTERISTIC_POWER    @"96378946-3148-11E4-8944-0002A5D5C51B"
 
+#define CONNECT_TIMEOUT         20
+
 @implementation BLElib
 @synthesize centralManager;
 @synthesize connectedPeripheral,connectedService,msgArmCharacteristic, msgPowerCharacteristic;
@@ -34,13 +36,14 @@
         self.msgPowerCharacteristic = nil;
         self.txDelayCounter = 0;
         centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
-
+        
+        bConnecting = NO;
+        connectingTimeout = 0;
+        connectingPeripheral = nil;
 	}
+    
     return self;
 }
-
-
-
 
 #pragma mark -
 #pragma mark Discovery
@@ -51,13 +54,16 @@
 {
     if (centralManager.state == CBCentralManagerStatePoweredOn)
     {
+        NSArray			*uuidArray	= [NSArray arrayWithObjects:[CBUUID UUIDWithString:uuidString], nil];
+        NSDictionary	*options	= [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
+        
+        //[centralManager scanForPeripheralsWithServices:uuidArray options:options];
         [centralManager scanForPeripheralsWithServices:nil options:nil];
-    }else{
-        if(LOG)
-            NSLog(@"Fail to open the bluetooth\n");
+    }
+    else {
+        if(LOG) {  NSLog(@"Fail to open the bluetooth\n"); }
     }
 }
-
 
 - (void) stopScanning
 {
@@ -66,36 +72,21 @@
 	[centralManager stopScan];
 }
 
-
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    if(LOG)NSLog(@"Found a BLE Device : %@",peripheral);
-    if(LOG)NSLog(@"advertisementData: %@",advertisementData);
-    if(LOG)NSLog(@"RSSI: %@",RSSI);
-#if 1
     if (peripheral.name == nil) {
         if (LOG)
             NSLog(@"peripheral.name is null");
         return;
     }
-    
-    //if ([peripheral.name rangeOfString:@"OBD"].location != NSNotFound) {
-        if (LOG)
-        {
-            NSString *logData = [NSString stringWithFormat:@"peripheral.name is %@", peripheral.name];
-            NSLog(@"%@",logData);
-        }
-        [BLEDelegate didFoundPeripheral:peripheral advertisementData:advertisementData RSSI:RSSI];
-    //}
-    //else {
-    //    if (LOG)
-    //        NSLog(@"peripheral.name is not OBD");
-   // }
-#else
-    [BLEDelegate didFoundPeripheral:peripheral advertisementData:advertisementData RSSI:RSSI];
-#endif
-}
 
+    if (LOG)
+    {
+        NSString *logData = [NSString stringWithFormat:@"peripheral.name is %@", peripheral.name];
+        NSLog(@"%@",logData);
+    }
+    [BLEDelegate didFoundPeripheral:peripheral advertisementData:advertisementData RSSI:RSSI];
+}
 
 #pragma mark -
 #pragma mark Connection/Disconnection
@@ -105,11 +96,25 @@
 - (void) connectPeripheral:(CBPeripheral*)peripheral
 {
 	if (peripheral.state == CBPeripheralStateDisconnected) {
+        bConnecting = YES;
+        connectingTimeout  = 0;
+        connectingPeripheral = peripheral;
+        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown:) userInfo:nil repeats:YES];
 		[centralManager connectPeripheral:peripheral options:nil];
         if(LOG)NSLog(@"connectPeripheral: %@",peripheral);
 	}
 }
 
+-(void) countDown:(NSTimer*)localTimer
+{
+    connectingTimeout++;
+    if ( connectingTimeout == CONNECT_TIMEOUT )
+    {
+        bConnecting = NO;
+        [timer invalidate];
+        timer = nil;
+    }
+}
 
 - (void) disconnectPeripheral:(CBPeripheral*)peripheral
 {
@@ -228,6 +233,8 @@
 - (void) centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
     if(LOG)NSLog(@"Attempted connection to peripheral %@ failed: %@", [peripheral name], [error localizedDescription]);
+    if (connectingPeripheral == nil || (bConnecting == NO && connectingTimeout == 0) )
+        return;
     [BLEDelegate didFailToConnectPeripheral:peripheral error:error];
 }
 
@@ -280,7 +287,7 @@
 		case CBCentralManagerStatePoweredOn:
 		{
             if(LOG)NSLog(@"CBCentralManagerStatePoweredOn");
-            [centralManager retrieveConnectedPeripherals];
+            //[centralManager retrieveConnectedPeripherals];
             //[centralManager scanForPeripheralsWithServices:nil options:nil];
 			break;
 		}
@@ -308,12 +315,17 @@
 /****************************************************************************/
 - (void) peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    if(LOG)NSLog(@"didUpdateValueForCharacteristic:%@:%@", [characteristic UUID],[characteristic value]);
-    
-    NSData *rcvData = [characteristic value];
-    if (rcvData != nil) {
-        [BLEDelegate didRecieveData:characteristic data:rcvData];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        if (characteristic == nil)
+            return;
+        
+        if(LOG)NSLog(@"didUpdateValueForCharacteristic:%@:%@", [characteristic UUID],[characteristic value]);
+        
+        NSData *rcvData = [characteristic value];
+        if (rcvData != nil) {
+            [BLEDelegate didReceiveData:characteristic data:rcvData];
+        }
+    });
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
@@ -367,8 +379,11 @@
 {
     /* When a write occurs, need to set off a re-read of the local CBCharacteristic to update its value */
     //[peripheral readValueForCharacteristic:characteristic];
-    if(LOG)NSLog(@"didWriteValueForCharacteristic:%@", [characteristic value]);
-    [BLEDelegate didSendData:[characteristic value]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        if(LOG)NSLog(@"didWriteValueForCharacteristic:%@", [characteristic value]);
+        [BLEDelegate didSendData:[characteristic value]];
+    });
 }
 
 #pragma mark -
